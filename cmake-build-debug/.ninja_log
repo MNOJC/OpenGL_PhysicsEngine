@@ -1,0 +1,6 @@
+# ninja log v6
+16	518	7622883378738790	CMakeFiles/OpenGLCubeRenderer.dir/main.cpp.obj	e6b18fea9a6917e0
+519	1150	7622883383758463	OpenGLCubeRenderer.exe	1c1e8b2943d6cdde
+8	209	7622929219785848	build.ninja	16fa33f8be1da2a7
+22	2094	7622929437716300	CMakeFiles/OpenGLCubeRenderer.dir/main.cpp.obj	bb427095fcba87e4
+2094	3311	7622929458432582	OpenGLCubeRenderer.exe	7c45bf197b3a42

@@ -1,0 +1,3 @@
+F:/Clion_Project/OpenGL_PhysicsEngine/cmake-build-debug/CMakeFiles/OpenGLCubeRenderer.dir
+F:/Clion_Project/OpenGL_PhysicsEngine/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/Clion_Project/OpenGL_PhysicsEngine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
