@@ -3,6 +3,8 @@
 #include <GL/gl.h>
 #include <iostream>
 #include <fstream>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include <sstream>
 #include <string>
 #include <glm/glm.hpp>
@@ -74,6 +76,12 @@ int main()
         return -1;
     }
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+    ImGui::StyleColorsDark();
+
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -130,6 +138,17 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Afficher du texte simple
+        ImGui::Text("Hello, ImGui!");
+
+        // Rendu des éléments ImGui
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         model = glm::rotate(model, glm::radians(5.0f), glm::vec3(0.5f, 1.0f, 0.3f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -141,7 +160,10 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }

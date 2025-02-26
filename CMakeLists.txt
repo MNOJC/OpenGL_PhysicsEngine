@@ -1,16 +1,29 @@
 cmake_minimum_required(VERSION 3.30)
-project(OpenGLCubeRenderer)
+project(OpenGL_PhysicsEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(OpenGLCubeRenderer main.cpp)
+add_executable(OpenGL_PhysicsEngine main.cpp)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(glm REQUIRED)
+find_package(OpenGL REQUIRED)
 
-target_link_libraries(OpenGLCubeRenderer glfw OpenGL32 GLEW::GLEW)
-include_directories(${GLM_INCLUDE_DIRS})
+
+add_subdirectory(lib/imgui)
+
+
+target_link_libraries(OpenGL_PhysicsEngine
+        glfw 
+        OpenGL32
+        GLEW::GLEW
+        imgui
+)
+
+target_include_directories(OpenGL_PhysicsEngine PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/backends
+)
 
 foreach(SHADER_FILE ${SHADER_FILES})
     get_filename_component(SHADER_NAME ${SHADER_FILE} NAME)
