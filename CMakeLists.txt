@@ -3,7 +3,13 @@ project(OpenGL_PhysicsEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(OpenGL_PhysicsEngine main.cpp)
+add_executable(OpenGL_PhysicsEngine main.cpp
+        Meshes/Mesh.cpp
+        Meshes/Mesh.h
+        Meshes/Cube/CubeMesh.cpp
+        Meshes/Cube/CubeMesh.h
+        Meshes/Platform/Platform.cpp
+        Meshes/Platform/Platform.h)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
