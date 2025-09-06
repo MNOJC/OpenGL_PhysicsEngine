@@ -1,9 +1,12 @@
-#version 330 core
 
-in vec3 ourColor; // Couleur du fragment
-out vec4 FragColor; // Couleur du fragment
+#version 410 core
 
-void main() {
-    
-    FragColor = vec4(ourColor, 1.0); // Définir la couleur finale du fragment
+in vec3 ourColor;
+out vec4 FragColor;
+
+uniform vec4 u_Color;
+
+void main() 
+{
+    FragColor = u_Color;
 }
