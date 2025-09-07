@@ -18,6 +18,8 @@ public:
     void Update(float deltaTime);
     void Render() const;
 
+    glm::mat4 GetModelMatrix() const;
+
     glm::vec3 position = {0, 0, 0};
     glm::vec3 rotation = {0, 0, 0};
     glm::vec3 scale = {1, 1, 1};

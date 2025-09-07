@@ -8,6 +8,7 @@
 #include "Window.h"
 #include <memory>
 #include "../entities/GameObject.h"
+#include "../rendering/Camera.h"
 
 class Application {
 public:
@@ -22,16 +23,22 @@ private:
     void Initialize();
     void Shutdown();
     void ProcessInput();
+    void ProcessScroll(double xoffset, double yoffset);
+    void ProcessMouse(double xpos, double ypos);
     void Update(float deltaTime);
     void Render();
 
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Shader> m_shader;
+    std::unique_ptr<Camera> m_camera;
 
     bool m_isRunning;
     float m_lastFrameTime;
     std::vector<std::shared_ptr<GameObject>> m_gameObjects;
     float m_colorTime;
+    float m_lastX, m_lastY;
+    bool m_firstMouse;
+    
 };
 
 
