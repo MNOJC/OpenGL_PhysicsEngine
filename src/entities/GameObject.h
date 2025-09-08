@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 #include "../rendering/Mesh.h"
+#include "../rendering/Shader.h"
 #include <memory>
 
 
@@ -26,6 +27,8 @@ public:
 
     glm::vec3 velocity = {0, 0, 0};
     glm::vec3 acceleration = {0, 0, 0};
+
+    std::shared_ptr<Mesh> GetMesh() const { return m_mesh; }
 
 private:
 

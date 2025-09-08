@@ -7,7 +7,7 @@
 
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 0.01f;
+const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -34,7 +34,7 @@ glm::mat4 Camera::GetProjectionMatrix(float aspectRatio) const
 void Camera::ProcessKeyboard(int direction, float deltaTime)
 {
     float velocity = m_movementSpeed * deltaTime;
-
+    
     if (direction == 0)
         m_position += m_front * velocity;
     if (direction == 1)
@@ -72,6 +72,8 @@ void Camera::ProcessMouseScroll(float yoffset)
         m_zoom = 1.0f;
     if (m_zoom > 45.0f)
         m_zoom = 45.0f;
+
+
 }
 
 void Camera::UpdateCameraVectors()

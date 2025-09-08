@@ -34,6 +34,7 @@ Mesh::~Mesh()
 void Mesh::Draw() const
 {
     glBindVertexArray(m_VAO);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

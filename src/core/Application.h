@@ -7,6 +7,9 @@
 #include "../rendering/Shader.h"
 #include "Window.h"
 #include <memory>
+#include "../rendering/Renderer.h"
+#include "../ui/GUI.h"
+#include "Time.h"
 #include "../entities/GameObject.h"
 #include "../rendering/Camera.h"
 
@@ -31,13 +34,15 @@ private:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Shader> m_shader;
     std::unique_ptr<Camera> m_camera;
+    std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+    std::unique_ptr<Time> m_time;
+    std::unique_ptr<GUI> m_gui;
 
     bool m_isRunning;
-    float m_lastFrameTime;
-    std::vector<std::shared_ptr<GameObject>> m_gameObjects;
     float m_colorTime;
-    float m_lastX, m_lastY;
     bool m_firstMouse;
+    bool m_cameraMouseControl;
+    double m_lastMouseX, m_lastMouseY;
     
 };
 
