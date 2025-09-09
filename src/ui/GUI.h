@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <functional>
+#include <map>
 
 
 class GUI {
@@ -29,6 +31,7 @@ public:
     void RenderRendererSection();          
     void RenderSceneHierarchySection();    
     void RenderPhysicsSection();
+    void RenderCameraSection();
 
     bool  AddButton(const std::string& label);
     void AddSliderFloat(const std::string& label, float* value, float min, float max, const char* format);
@@ -37,17 +40,24 @@ public:
     void AddText(const std::string& text);
 
     void SetPerformanceData(int fps, float frameTime, float deltaTime);
+    void SetCameraControlsData(float sensitivity, float speed);
     void SetSceneObjects(const std::vector<std::shared_ptr<GameObject>>& objects);
     void SetSelectedObject(std::shared_ptr<GameObject> object);
 
     bool IsWireframeEnabled() const { return m_wireframeMode; }
     float GetGravityValue() const { return m_gravityValue; }
     glm::vec3 GetClearColorValue() const { return m_clearColorValue ; };
+    void GetCameraControlsData(float &sensibility, float &speed) { sensibility = m_cameraSensitivity; speed = m_cameraSpeed; };
+
+    void RegisterCallback(const std::string& buttonName, std::function<void()> callback);
+    void ExecuteCallback(const std::string& buttonName);
 
 private:
 
 
     void SetupStyle();
+
+    std::map<std::string, std::function<void()>> m_callbacks;
     
     std::vector<std::shared_ptr<GameObject>> m_sceneObjects;
     std::shared_ptr<GameObject> m_selectedObject;
@@ -58,6 +68,9 @@ private:
     int m_fps = 0;
     float m_frameTime = 0.0f;
     float m_deltaTime = 0.0f;
+
+    float m_cameraSensitivity;
+    float m_cameraSpeed;
 
     bool m_showPerformance = true;
     bool m_showRenderer = true;

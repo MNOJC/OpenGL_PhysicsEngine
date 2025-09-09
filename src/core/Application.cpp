@@ -44,6 +44,7 @@ void Application::Initialize()
     m_time = std::make_unique<Time>();
     
     m_cameraMouseControl = false;
+
     
     m_window = std::make_unique<Window>(800, 600, "Physics Engine");
     
@@ -62,13 +63,7 @@ void Application::Initialize()
     }
     
     m_shader = std::make_unique<Shader>("../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag");
-
-    auto cubeMesh = CubeMesh::Create();
-    auto gameObject = std::make_shared<GameObject>(cubeMesh);
-    gameObject->position = glm::vec3(0.0f, 0.0f, 0.0f);
-    gameObject->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    gameObject->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    m_gameObjects.push_back(gameObject);
+    
 
     m_camera = std::make_unique<Camera>(glm::vec3(-3.0f, 0.0f, 0.0f));
     
@@ -95,6 +90,9 @@ void Application::Initialize()
 
     m_gui = std::make_unique<GUI>();
     m_gui->Initialize(m_window->GetWindow());
+
+    m_gui->SetCameraControlsData(m_camera->m_mouseSensitivity, m_camera->m_movementSpeed);
+    m_gui->RegisterCallback("AddCube", [this]() { this->SpawnObjects(CubeMesh::Create()); });
     
     m_isRunning = true;
     
@@ -150,6 +148,7 @@ void Application::ProcessInput()
             m_camera->ProcessKeyboard(5, m_time->GetDeltaTime());
     }
     
+    m_gui->GetCameraControlsData(m_camera->m_mouseSensitivity, m_camera->m_movementSpeed);
 }
 
 void Application::ProcessScroll(double xoffset, double yoffset)
@@ -226,7 +225,8 @@ void Application::Render()
 
     m_gui->SetPerformanceData(m_time->GetFPS(), m_time->GetDeltaTime() * 1000.0f, m_time->GetDeltaTime());
 
-    for (auto& obj : m_gameObjects)
+    if (m_gameObjects.size() > 0)
+   for (auto& obj : m_gameObjects)
     {
         m_gui->SetSceneObjects(m_gameObjects);
         m_shader->SetMat4("model", obj->GetModelMatrix());
@@ -246,5 +246,13 @@ void Application::Render()
     {
         m_isRunning = false;
     }
+    
+}
+
+void Application::SpawnObjects(std::shared_ptr<Mesh> mesh)
+{
+    auto gameObject = std::make_shared<GameObject>(mesh);
+    gameObject->position = glm::vec3(rand() % 10,  rand() % 10,  rand() % 10);
+    m_gameObjects.push_back(gameObject);
     
 }

@@ -30,6 +30,7 @@ private:
     void ProcessMouse(double xpos, double ypos);
     void Update(float deltaTime);
     void Render();
+    void SpawnObjects(std::shared_ptr<Mesh> mesh);
 
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Shader> m_shader;

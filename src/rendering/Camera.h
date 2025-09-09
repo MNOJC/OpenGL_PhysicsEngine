@@ -24,6 +24,10 @@ public:
     glm::vec3 GetFront() const { return m_front; };
     float GetZoom() const { return m_zoom; };
 
+    float m_movementSpeed;
+    float m_mouseSensitivity;
+    float m_zoom;
+
 private:
     
     void UpdateCameraVectors();
@@ -37,9 +41,6 @@ private:
     float m_yaw;
     float m_pitch;
     
-    float m_movementSpeed;
-    float m_mouseSensitivity;
-    float m_zoom;
 };
 
 

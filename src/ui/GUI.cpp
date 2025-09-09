@@ -69,6 +69,11 @@ void GUI::RenderSidePanel()
     {
         RenderPhysicsSection();
     }
+
+    if (ImGui::CollapsingHeader("CAMERA SETTINGS", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        RenderCameraSection();
+    }
     
     ImGui::End();
 }
@@ -81,7 +86,7 @@ void GUI::RenderPhysicsSection()
     
     if (AddButton("Add Cube"))
     {
-        std::cout << "Add Cube button pressed" << std::endl;
+        ExecuteCallback("AddCube");
     }
     
     if (AddButton("Clear All"))
@@ -124,6 +129,12 @@ void GUI::SetPerformanceData(int fps, float frameTime, float deltaTime)
     m_deltaTime = deltaTime;
 }
 
+void GUI::SetCameraControlsData(float sensitivity, float speed)
+{
+    m_cameraSensitivity = sensitivity;
+    m_cameraSpeed = speed;
+}
+
 void GUI::SetSceneObjects(const std::vector<std::shared_ptr<GameObject>> &objects)
 {
     m_sceneObjects = objects;
@@ -132,6 +143,20 @@ void GUI::SetSceneObjects(const std::vector<std::shared_ptr<GameObject>> &object
 void GUI::SetSelectedObject(std::shared_ptr<GameObject> object)
 {
     m_selectedObject = object;
+}
+
+void GUI::RegisterCallback(const std::string &buttonName, std::function<void()> callback)
+{
+    m_callbacks[buttonName] = callback;
+}
+
+void GUI::ExecuteCallback(const std::string &buttonName)
+{
+    auto it = m_callbacks.find(buttonName);
+    if (it != m_callbacks.end())
+    {
+        it->second();
+    }
 }
 
 void GUI::SetupStyle()
@@ -220,10 +245,16 @@ void GUI::RenderSceneHierarchySection()
     }
     
     for (size_t i = 0; i < m_sceneObjects.size(); ++i) {
-        std::string label = "Object " + std::to_string(i);
+        std::string label = "Cube " + std::to_string(i);
         if (ImGui::Selectable(label.c_str(), m_selectedObject == m_sceneObjects[i])) {
             m_selectedObject = m_sceneObjects[i];
         }
     }
     ImGui::Dummy(ImVec2(0, 5));
+}
+
+void GUI::RenderCameraSection()
+{
+    AddSliderFloat("Sensitivity", &m_cameraSensitivity, 0.01f, 0.5f, "%.3f");
+    AddSliderFloat("Speed", &m_cameraSpeed, 0.1f, 10.0f, "%.3f");
 }
