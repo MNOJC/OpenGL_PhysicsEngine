@@ -43,6 +43,10 @@ void Camera::ProcessKeyboard(int direction, float deltaTime)
         m_position -= m_right * velocity;
     if (direction == 3)
         m_position += m_right * velocity;
+    if (direction == 4)
+        m_position -= m_up * velocity;
+    if (direction == 5)
+        m_position += m_up * velocity;
     
 }
 

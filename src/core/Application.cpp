@@ -142,6 +142,12 @@ void Application::ProcessInput()
     
         if (glfwGetKey(m_window->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
             m_camera->ProcessKeyboard(3, m_time->GetDeltaTime());
+        
+        if (glfwGetKey(m_window->GetWindow(), GLFW_KEY_Q) == GLFW_PRESS)
+            m_camera->ProcessKeyboard(4, m_time->GetDeltaTime());
+
+        if (glfwGetKey(m_window->GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
+            m_camera->ProcessKeyboard(5, m_time->GetDeltaTime());
     }
     
 }
