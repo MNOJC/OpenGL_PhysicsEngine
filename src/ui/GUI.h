@@ -42,6 +42,7 @@ public:
 
     bool IsWireframeEnabled() const { return m_wireframeMode; }
     float GetGravityValue() const { return m_gravityValue; }
+    glm::vec3 GetClearColorValue() const { return m_clearColorValue ; };
 
 private:
 
@@ -63,5 +64,7 @@ private:
     bool m_showSceneHierarchy = true;
     bool m_showPhysics = true;
     bool m_depthTest = true;
+
+    glm::vec3 m_clearColorValue = glm::vec3(0.0f, 0.0f, 0.0f);
 };
 

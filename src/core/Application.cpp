@@ -197,10 +197,18 @@ void Application::Update(float deltaTime)
 
 void Application::Render()
 {
-
-    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glm::vec3 ClearColor = m_gui->GetClearColorValue();
     
+    glClearColor(ClearColor[0], ClearColor[1], ClearColor[2], 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (m_gui->IsWireframeEnabled())
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    } else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
     glm::mat4 view = m_camera->GetViewMatrix();
     glm::mat4 projection = m_camera->GetProjectionMatrix(static_cast<float>(m_window->GetWidth()) / static_cast<float>(m_window->GetHeight()));
     

@@ -197,13 +197,15 @@ void GUI::RenderRendererSection()
     AddCheckbox("Depth Test", &m_depthTest);
     
     static float bgColor[3] = {0.2f, 0.3f, 0.4f};
-    AddSliderFloat("Background R", &bgColor[0], 0.0f, 1.0f, "%.3f");
-    AddSliderFloat("Background G", &bgColor[1], 0.0f, 1.0f, "%.3f");
-    AddSliderFloat("Background B", &bgColor[2], 0.0f, 1.0f, "%.3f");
+    AddSliderFloat("R", &bgColor[0], 0.0f, 1.0f, "%.3f");
+    AddSliderFloat("G", &bgColor[1], 0.0f, 1.0f, "%.3f");
+    AddSliderFloat("B", &bgColor[2], 0.0f, 1.0f, "%.3f");
+
+    m_clearColorValue = glm::vec3(bgColor[0], bgColor[1], bgColor[2]);
     
-    if (AddButton("Apply Background Color"))
+    if (AddButton("Reset Background Color"))
     {
-        std::cout << "Background color changed to: " << bgColor[0] << ", " << bgColor[1] << ", " << bgColor[2] << std::endl;
+        bgColor[0] = 0.2f; bgColor[1] = 0.3f; bgColor[2] = 0.4f;
     }
     
     ImGui::Spacing();
