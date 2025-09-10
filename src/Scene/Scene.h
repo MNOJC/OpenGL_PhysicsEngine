@@ -14,10 +14,10 @@ public:
 
     virtual ~Scene() = default;
 
-    virtual void Load() = 0;
-    virtual void Unload() = 0;
-    virtual void Update(float deltaTime) = 0;
-    virtual void Render() = 0;
+    virtual void Load();
+    virtual void Unload();
+    virtual void Update(float deltaTime);
+    virtual void Render();
 
     const std::vector<std::shared_ptr<GameObject>>& GetObjects() const { return m_objects; }
     const std::string& GetName() const { return m_name; }

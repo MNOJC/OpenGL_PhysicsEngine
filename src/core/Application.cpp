@@ -11,6 +11,8 @@
 #include "../entities/CubeMesh.h"
 #include "../Scene/Templates/DefaultScene.h"
 #include "CallbackRegistry.h"
+#include <random>
+#include "../Scene/Templates/SphereScene.h"
 
 Application::Application() : m_isRunning(false) {}
 
@@ -92,6 +94,7 @@ void Application::Initialize()
     m_sceneManager = std::make_shared<SceneManager>();
     m_sceneManager->Initialize();
     m_sceneManager->RegisterScene<DefaultScene>("Default");
+    m_sceneManager->RegisterScene<SphereScene>("Sphere");
     
     m_gui = std::make_unique<GUI>();
     m_gui->SetSceneManager(m_sceneManager);
@@ -108,7 +111,7 @@ void Application::Initialize()
     m_gui->RegisterCallback("ReloadScene", [this]() {m_sceneManager->ReloadCurrentScene();});
 
     CallbackRegistry::Instance().RegisterCallback("ReloadScene", [this]() {m_gameObjects = m_sceneManager->GetCurrentScene()->GetObjects();});
-    m_sceneManager->LoadScene("Default");
+    m_sceneManager->LoadScene("Sphere");
     
     
     
@@ -287,7 +290,15 @@ void Application::Render()
 void Application::SpawnObjects(std::shared_ptr<Mesh> mesh)
 {
     auto gameObject = std::make_shared<GameObject>(mesh);
-    gameObject->position = glm::vec3(rand() % 10,  rand() % 10,  rand() % 10);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
+
+    float x = dist(gen);
+    float z = dist(gen);
+    
+    gameObject->position = glm::vec3(x, 4, z);
     gameObject->color = glm::vec4((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f, 1.0f);
     m_gameObjects.push_back(gameObject);
     

@@ -6,19 +6,20 @@
 
 #include "../Scene.h"
 
-class DefaultScene : public Scene {
+class SphereScene : public Scene {
 
 public:
-    DefaultScene();
-    
+
+    SphereScene();
+        
     void Load() override;
     void Unload() override;
     void Update(float deltaTime) override;
     void Render() override;
 
-
 private:
     
-    std::shared_ptr<GameObject> CreateGround();
+    std::shared_ptr<GameObject> CreateSphere();
+
 };
 

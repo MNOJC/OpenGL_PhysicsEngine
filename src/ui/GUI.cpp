@@ -363,6 +363,11 @@ int GUI::GetObjectIndex(const std::shared_ptr<GameObject>& object)
 void GUI::RenderSceneSection()
 {
         auto& availableScenes = m_sceneManager->GetAvailableScenes();
+
+    std::cout << "Available scenes:\n";
+    for (const auto& sceneName : availableScenes) {
+        std::cout << " - " << sceneName << "\n";
+    }
         
         if (ImGui::BeginCombo("Current Scene", m_sceneManager->GetCurrentScene()->GetName().c_str())) {
             for (const auto& sceneName : availableScenes) {

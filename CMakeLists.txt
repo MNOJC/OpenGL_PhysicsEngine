@@ -35,7 +35,9 @@ add_executable(OpenGL_PhysicsEngine main.cpp
         src/rendering/MeshUtils.cpp
         src/rendering/MeshUtils.h
         src/core/CallbackRegistry.cpp
-        src/core/CallbackRegistry.h)
+        src/core/CallbackRegistry.h
+        src/Scene/Templates/SphereScene.cpp
+        src/Scene/Templates/SphereScene.h)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(GLEW REQUIRED)

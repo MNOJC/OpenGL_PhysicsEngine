@@ -185,6 +185,14 @@ build CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/CallbackRegistry.cpp.obj: CXX
   OBJECT_DIR = CMakeFiles\OpenGL_PhysicsEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenGL_PhysicsEngine.dir\src\core
 
+build CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Templates/SphereScene.cpp.obj: CXX_COMPILER__OpenGL_PhysicsEngine_unscanned_Debug F$:/Clion_Project/OpenGL_PhysicsEngine/src/Scene/Templates/SphereScene.cpp || cmake_object_order_depends_target_OpenGL_PhysicsEngine
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\OpenGL_PhysicsEngine.dir\src\Scene\Templates\SphereScene.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IF:/Clion_Project/OpenGL_PhysicsEngine/lib/imgui -IF:/Clion_Project/OpenGL_PhysicsEngine/lib/imgui/backends -isystem C:/Users/natha/VCPKG/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\OpenGL_PhysicsEngine.dir
+  OBJECT_FILE_DIR = CMakeFiles\OpenGL_PhysicsEngine.dir\src\Scene\Templates
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target OpenGL_PhysicsEngine
@@ -193,7 +201,7 @@ build CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/CallbackRegistry.cpp.obj: CXX
 #############################################
 # Link the executable OpenGL_PhysicsEngine.exe
 
-build OpenGL_PhysicsEngine.exe: CXX_EXECUTABLE_LINKER__OpenGL_PhysicsEngine_Debug CMakeFiles/OpenGL_PhysicsEngine.dir/main.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Mesh.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/CubeMesh.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/Platform.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Application.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Window.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Time.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Shader.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Camera.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Renderer.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/ui/GUI.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/GameObject.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Scene.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/SceneManager.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Templates/DefaultScene.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/MeshUtils.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/CallbackRegistry.cpp.obj | C$:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glew32d.lib lib/imgui/libimgui.a C$:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glfw3dll.lib || lib/imgui/libimgui.a
+build OpenGL_PhysicsEngine.exe: CXX_EXECUTABLE_LINKER__OpenGL_PhysicsEngine_Debug CMakeFiles/OpenGL_PhysicsEngine.dir/main.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Mesh.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/CubeMesh.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/Platform.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Application.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Window.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/Time.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Shader.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Camera.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/Renderer.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/ui/GUI.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/entities/GameObject.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Scene.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/SceneManager.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Templates/DefaultScene.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/rendering/MeshUtils.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/core/CallbackRegistry.cpp.obj CMakeFiles/OpenGL_PhysicsEngine.dir/src/Scene/Templates/SphereScene.cpp.obj | C$:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glew32d.lib lib/imgui/libimgui.a C$:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glfw3dll.lib || lib/imgui/libimgui.a
   FLAGS = -g
   LINK_LIBRARIES = -lOpenGL32  C:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glew32d.lib  lib/imgui/libimgui.a  -lopengl32  -lglu32  C:/Users/natha/VCPKG/vcpkg/installed/x64-windows/debug/lib/glfw3dll.lib  -lOpenGL32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\OpenGL_PhysicsEngine.dir

@@ -14,5 +14,6 @@ class MeshUtils {
     public:
 
     static std::shared_ptr<Mesh> CreatePlane(float width, float height);
+    static std::shared_ptr<Mesh> CreateSphere(float radius,  int segments = 32);
 };
 
