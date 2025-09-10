@@ -15,6 +15,9 @@ public:
     glm::mat4 GetViewMatrix() const;
     glm::mat4 GetProjectionMatrix(float aspectRatio) const;
 
+    void SetTarget(glm::vec3 position);
+    void UpdateYawPitchFromDirection(const glm::vec3& direction);
+
 
     void ProcessKeyboard(int direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);

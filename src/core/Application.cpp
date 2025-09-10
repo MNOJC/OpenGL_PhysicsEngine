@@ -9,6 +9,8 @@
 #include <imgui.h>
 #include "../entities/GameObject.h"
 #include "../entities/CubeMesh.h"
+#include "../Scene/Templates/DefaultScene.h"
+#include "CallbackRegistry.h"
 
 Application::Application() : m_isRunning(false) {}
 
@@ -44,9 +46,8 @@ void Application::Initialize()
     m_time = std::make_unique<Time>();
     
     m_cameraMouseControl = false;
-
     
-    m_window = std::make_unique<Window>(800, 600, "Physics Engine");
+    m_window = std::make_unique<Window>(1920, 1080, "Physics Engine");
     
     if (!m_window->Initialize())
     {
@@ -88,11 +89,28 @@ void Application::Initialize()
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
+    m_sceneManager = std::make_shared<SceneManager>();
+    m_sceneManager->Initialize();
+    m_sceneManager->RegisterScene<DefaultScene>("Default");
+    
     m_gui = std::make_unique<GUI>();
+    m_gui->SetSceneManager(m_sceneManager);
+    
     m_gui->Initialize(m_window->GetWindow());
-
+    
     m_gui->SetCameraControlsData(m_camera->m_mouseSensitivity, m_camera->m_movementSpeed);
     m_gui->RegisterCallback("AddCube", [this]() { this->SpawnObjects(CubeMesh::Create()); });
+    m_gui->RegisterCallback("ClearAllMesh", [this]() { this->ClearAllMeshes(); });
+    m_gui->RegisterCallback("FocusOnSelected", [this]() { this->FocusOnSelectedObject(); });
+    m_gui->RegisterCallback("DeleteSelected", [this]() { this->DeleteSelectedObject(); });
+
+    m_gui->RegisterCallback("LoadDefaultScene", [this]() { m_sceneManager->LoadScene("Default");});
+    m_gui->RegisterCallback("ReloadScene", [this]() {m_sceneManager->ReloadCurrentScene();});
+
+    CallbackRegistry::Instance().RegisterCallback("ReloadScene", [this]() {m_gameObjects = m_sceneManager->GetCurrentScene()->GetObjects();});
+    m_sceneManager->LoadScene("Default");
+    
+    
     
     m_isRunning = true;
     
@@ -153,7 +171,11 @@ void Application::ProcessInput()
 
 void Application::ProcessScroll(double xoffset, double yoffset)
 {
-    m_camera->ProcessMouseScroll(yoffset);
+    if (!ImGui::GetIO().WantCaptureMouse)
+    {
+        m_camera->ProcessMouseScroll(yoffset);
+    }
+    
 }
 
 void Application::ProcessMouse(double xpos, double ypos)
@@ -198,6 +220,8 @@ void Application::Update(float deltaTime)
     {
         obj->Update(deltaTime);
     }
+
+    m_sceneManager->Update(deltaTime);
 }
 
 void Application::Render()
@@ -214,6 +238,14 @@ void Application::Render()
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+
+    if (m_gui->IsDepthTestEnabled())
+    {
+        glEnable(GL_DEPTH_TEST);
+    } else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
     glm::mat4 view = m_camera->GetViewMatrix();
     glm::mat4 projection = m_camera->GetProjectionMatrix(static_cast<float>(m_window->GetWidth()) / static_cast<float>(m_window->GetHeight()));
     
@@ -221,7 +253,6 @@ void Application::Render()
     m_shader->Use();
     m_shader->SetMat4("view", view);
     m_shader->SetMat4("projection", projection);
-    m_shader->SetVec4("u_Color", glm::vec4(1, 1, 1, 1.0f));
 
     m_gui->SetPerformanceData(m_time->GetFPS(), m_time->GetDeltaTime() * 1000.0f, m_time->GetDeltaTime());
 
@@ -230,11 +261,15 @@ void Application::Render()
     {
         m_gui->SetSceneObjects(m_gameObjects);
         m_shader->SetMat4("model", obj->GetModelMatrix());
+        m_shader->SetVec4("u_Color", obj->color);
         obj->Render();
     }
     
+    m_sceneManager->Render();
+    
     m_gui->BeginFrame();
-    m_gui->RenderSidePanel(); 
+    m_gui->RenderLeftSidePanel();
+    m_gui->RenderRightSidePanel(); 
     m_gui->EndFrame();
     
     m_window->SwapBuffers();
@@ -253,6 +288,46 @@ void Application::SpawnObjects(std::shared_ptr<Mesh> mesh)
 {
     auto gameObject = std::make_shared<GameObject>(mesh);
     gameObject->position = glm::vec3(rand() % 10,  rand() % 10,  rand() % 10);
+    gameObject->color = glm::vec4((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f, 1.0f);
     m_gameObjects.push_back(gameObject);
     
+}
+
+void Application::ClearAllMeshes()
+{
+    if (m_gameObjects.empty()) {
+        std::cout << "Scene is already empty" << std::endl;
+        return;
+    }
+    
+    size_t count = m_gameObjects.size();
+    m_gameObjects.clear();
+    m_gui->SetSceneObjects(m_gameObjects);
+    std::cout << "Cleared " << count << " game objects" << std::endl;
+}
+
+void Application::FocusOnSelectedObject()
+{
+    if (m_gui->GetSelectedObject())
+    {
+        auto obj = m_gui->GetSelectedObject();
+        m_camera->SetTarget(obj->position);
+        std::cout << "Focusing camera on selected object" << std::endl;
+    }
+}
+
+void Application::DeleteSelectedObject()
+{
+    if (m_gui->GetSelectedObject())
+    {
+        auto selected = m_gui->GetSelectedObject();
+        m_gameObjects.erase(
+            std::remove(m_gameObjects.begin(), m_gameObjects.end(), selected),
+            m_gameObjects.end()
+        );
+        
+        m_gui->SetSelectedObject(nullptr);
+        m_gui->SetSceneObjects(m_gameObjects);
+        std::cout << "Deleted selected object" << std::endl;
+    }
 }

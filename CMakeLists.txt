@@ -25,7 +25,17 @@ add_executable(OpenGL_PhysicsEngine main.cpp
         src/ui/GUI.cpp
         src/ui/GUI.h
         src/entities/GameObject.cpp
-        src/entities/GameObject.h)
+        src/entities/GameObject.h
+        src/Scene/Scene.cpp
+        src/Scene/Scene.h
+        src/Scene/SceneManager.cpp
+        src/Scene/SceneManager.h
+        src/Scene/Templates/DefaultScene.cpp
+        src/Scene/Templates/DefaultScene.h
+        src/rendering/MeshUtils.cpp
+        src/rendering/MeshUtils.h
+        src/core/CallbackRegistry.cpp
+        src/core/CallbackRegistry.h)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(GLEW REQUIRED)

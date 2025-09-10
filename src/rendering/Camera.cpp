@@ -31,6 +31,14 @@ glm::mat4 Camera::GetProjectionMatrix(float aspectRatio) const
     return glm::perspective(glm::radians(m_zoom), aspectRatio, 0.1f, 100.0f);
 }
 
+void Camera::SetTarget(glm::vec3 position)
+{
+    glm::vec3 direction = glm::normalize(m_position - position);
+    UpdateYawPitchFromDirection(direction);
+    m_position = position - direction * 3.0f;
+    UpdateCameraVectors();
+}
+
 void Camera::ProcessKeyboard(int direction, float deltaTime)
 {
     float velocity = m_movementSpeed * deltaTime;
@@ -91,4 +99,14 @@ void Camera::UpdateCameraVectors()
     m_right = glm::normalize(glm::cross(front, m_worldUp));
     m_up = glm::normalize(glm::cross(m_right, m_front));
     
+}
+
+void Camera::UpdateYawPitchFromDirection(const glm::vec3& direction)
+{
+    m_yaw = glm::degrees(atan2(direction.z, direction.x));
+    m_pitch = glm::degrees(asin(direction.y));
+    
+    if (m_yaw < 0) m_yaw += 360.0f;
+    if (m_yaw >= 360.0f) m_yaw -= 360.0f;
+    m_pitch = glm::clamp(m_pitch, -89.0f, 89.0f);
 }

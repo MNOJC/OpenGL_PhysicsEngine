@@ -6,6 +6,7 @@
 #include "../core/Window.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
+#include "../Scene/SceneManager.h"
 
 GUI::GUI()
 {
@@ -39,7 +40,7 @@ void GUI::EndFrame()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::RenderSidePanel()
+void GUI::RenderLeftSidePanel()
 {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(300, ImGui::GetIO().DisplaySize.y));
@@ -60,11 +61,6 @@ void GUI::RenderSidePanel()
         RenderRendererSection();
     }
     
-    if (ImGui::CollapsingHeader("SCENE HIERARCHY", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        RenderSceneHierarchySection();
-    }
-    
     if (ImGui::CollapsingHeader("PHYSICS SETTINGS", ImGuiTreeNodeFlags_DefaultOpen))
     {
         RenderPhysicsSection();
@@ -76,6 +72,36 @@ void GUI::RenderSidePanel()
     }
     
     ImGui::End();
+}
+
+void GUI::RenderRightSidePanel()
+{
+    float panelWidth = 300.0f;
+    ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+    ImVec2 panelPos = ImVec2(displaySize.x - panelWidth, 0.0f);
+    ImVec2 panelSize = ImVec2(panelWidth, displaySize.y);
+    
+    ImGui::SetNextWindowPos(panelPos, ImGuiCond_Always);
+    ImGui::SetNextWindowSize(panelSize, ImGuiCond_Always);
+    
+    ImGui::Begin("Right Panel", nullptr, 
+        ImGuiWindowFlags_NoMove | 
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoTitleBar);
+
+    if (ImGui::CollapsingHeader("SCENE HIERARCHY", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        RenderSceneHierarchySection();
+    }
+
+    if (ImGui::CollapsingHeader("SCENE MANAGER", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        RenderSceneSection();
+    }
+    
+    ImGui::End();
+
 }
 
 void GUI::RenderPhysicsSection()
@@ -91,7 +117,7 @@ void GUI::RenderPhysicsSection()
     
     if (AddButton("Clear All"))
     {
-        std::cout << "Clear All button pressed" << std::endl;
+        ExecuteCallback("ClearAllMesh");
     }
     
     ImGui::Spacing();
@@ -199,7 +225,7 @@ void GUI::Initialize(GLFWwindow* window)
 
 void GUI::Render()
 {
-    RenderSidePanel();
+    RenderLeftSidePanel();
 }
 
 void GUI::RenderPerformanceSection()
@@ -244,12 +270,77 @@ void GUI::RenderSceneHierarchySection()
         return;
     }
     
+    ImGui::Separator();
+    ImGui::Spacing();
+    
+    ImGui::Text("Scene Objects (%zu):", m_sceneObjects.size());
+    
+    ImGui::BeginChild("SceneList", ImVec2(0, 300), true, ImGuiWindowFlags_HorizontalScrollbar);
+    
     for (size_t i = 0; i < m_sceneObjects.size(); ++i) {
+        if (!m_sceneObjects[i]) continue;
+
+        const auto& pos = m_sceneObjects[i]->position;
         std::string label = "Cube " + std::to_string(i);
-        if (ImGui::Selectable(label.c_str(), m_selectedObject == m_sceneObjects[i])) {
+        std::string positionLabel = "(" + std::to_string((int)pos.x) + "," 
+                                  + std::to_string((int)pos.y) + "," 
+                                  + std::to_string((int)pos.z) + ")";
+
+        bool isSelected = (m_selectedObject == m_sceneObjects[i]);
+        if (ImGui::Selectable((label + "##" + std::to_string(i)).c_str(), isSelected)) {
             m_selectedObject = m_sceneObjects[i];
         }
+        
+        ImGui::SameLine();
+        ImGui::TextDisabled("%s", positionLabel.c_str());
+        
+        if (ImGui::IsItemHovered()) {
+            ImGui::BeginTooltip();
+            ImGui::Text("Object Details");
+            ImGui::Separator();
+            ImGui::Text("Index: %zu", i);
+            ImGui::Text("Position: (%.1f, %.1f, %.1f)", pos.x, pos.y, pos.z);
+            
+            if (m_sceneObjects[i]->color != glm::vec4(1.0f)) {
+                ImGui::Text("Color: (%.1f, %.1f, %.1f)", 
+                           m_sceneObjects[i]->color.r,
+                           m_sceneObjects[i]->color.g,
+                           m_sceneObjects[i]->color.b);
+            }
+            
+            ImGui::EndTooltip();
+        }
     }
+    
+    ImGui::EndChild();
+    
+    if (m_selectedObject) {
+        ImGui::Separator();
+        ImGui::Spacing();
+        
+        ImGui::Text("Selected Object:");
+        
+        int index = GetObjectIndex(m_selectedObject);
+        if (index != -1) {
+            ImGui::Text("Index: %d", index);
+        }
+        
+        ImGui::Text("Position: (%.2f, %.2f, %.2f)", 
+                   m_selectedObject->position.x,
+                   m_selectedObject->position.y,
+                   m_selectedObject->position.z);
+        
+        if (ImGui::Button("Focus Camera")) {
+            ExecuteCallback("FocusOnSelected");
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Delete Object")) {
+            ExecuteCallback("DeleteSelected");
+        }
+    }
+
     ImGui::Dummy(ImVec2(0, 5));
 }
 
@@ -257,4 +348,39 @@ void GUI::RenderCameraSection()
 {
     AddSliderFloat("Sensitivity", &m_cameraSensitivity, 0.01f, 0.5f, "%.3f");
     AddSliderFloat("Speed", &m_cameraSpeed, 0.1f, 10.0f, "%.3f");
+}
+
+int GUI::GetObjectIndex(const std::shared_ptr<GameObject>& object)
+{
+    for (size_t i = 0; i < m_sceneObjects.size(); ++i) {
+        if (m_sceneObjects[i] == object) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void GUI::RenderSceneSection()
+{
+        auto& availableScenes = m_sceneManager->GetAvailableScenes();
+        
+        if (ImGui::BeginCombo("Current Scene", m_sceneManager->GetCurrentScene()->GetName().c_str())) {
+            for (const auto& sceneName : availableScenes) {
+                if (ImGui::Selectable(sceneName.c_str())) {
+                    ExecuteCallback("LoadScene");
+                }
+            }
+            ImGui::EndCombo();
+        }
+        
+        if (ImGui::Button("Reload Scene")) {
+            ExecuteCallback("ReloadScene");
+        }
+        
+        ImGui::SameLine();
+}
+
+void GUI::SetSceneManager(std::shared_ptr<SceneManager> sceneManager)
+{
+    m_sceneManager = sceneManager;
 }

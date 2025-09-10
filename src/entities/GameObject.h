@@ -8,6 +8,7 @@
 #include "../rendering/Mesh.h"
 #include "../rendering/Shader.h"
 #include <memory>
+#include <iostream>
 
 
 class GameObject {
@@ -15,6 +16,9 @@ class GameObject {
 public:
 
     GameObject(std::shared_ptr<Mesh> mesh);
+    ~GameObject(){
+        std::cout << "GameObject destroyed" << std::endl;
+    };
 
     void Update(float deltaTime);
     void Render() const;
@@ -27,6 +31,8 @@ public:
 
     glm::vec3 velocity = {0, 0, 0};
     glm::vec3 acceleration = {0, 0, 0};
+
+    glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     std::shared_ptr<Mesh> GetMesh() const { return m_mesh; }
 

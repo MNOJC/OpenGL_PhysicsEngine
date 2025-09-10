@@ -13,6 +13,8 @@
 #include <functional>
 #include <map>
 
+#include "../Scene/SceneManager.h"
+
 
 class GUI {
 public:
@@ -26,12 +28,14 @@ public:
     void Render();
     void EndFrame();
 
-    void RenderSidePanel();                
+    void RenderLeftSidePanel();
+    void RenderRightSidePanel();  
     void RenderPerformanceSection();       
     void RenderRendererSection();          
     void RenderSceneHierarchySection();    
     void RenderPhysicsSection();
     void RenderCameraSection();
+    void RenderSceneSection();
 
     bool  AddButton(const std::string& label);
     void AddSliderFloat(const std::string& label, float* value, float min, float max, const char* format);
@@ -45,9 +49,13 @@ public:
     void SetSelectedObject(std::shared_ptr<GameObject> object);
 
     bool IsWireframeEnabled() const { return m_wireframeMode; }
+    bool IsDepthTestEnabled() const { return m_depthTest; }
     float GetGravityValue() const { return m_gravityValue; }
     glm::vec3 GetClearColorValue() const { return m_clearColorValue ; };
     void GetCameraControlsData(float &sensibility, float &speed) { sensibility = m_cameraSensitivity; speed = m_cameraSpeed; };
+    int GetObjectIndex(const std::shared_ptr<GameObject>& object);
+    std::shared_ptr<GameObject> GetSelectedObject() {return m_selectedObject;};
+    void SetSceneManager(std::shared_ptr<SceneManager> sceneManager);
 
     void RegisterCallback(const std::string& buttonName, std::function<void()> callback);
     void ExecuteCallback(const std::string& buttonName);
@@ -61,6 +69,7 @@ private:
     
     std::vector<std::shared_ptr<GameObject>> m_sceneObjects;
     std::shared_ptr<GameObject> m_selectedObject;
+    std::shared_ptr<SceneManager> m_sceneManager;
 
     bool m_wireframeMode = false;
     float m_gravityValue = 9.81f;

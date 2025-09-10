@@ -12,6 +12,7 @@
 #include "Time.h"
 #include "../entities/GameObject.h"
 #include "../rendering/Camera.h"
+#include "../scene/SceneManager.h"
 
 class Application {
 public:
@@ -31,6 +32,9 @@ private:
     void Update(float deltaTime);
     void Render();
     void SpawnObjects(std::shared_ptr<Mesh> mesh);
+    void ClearAllMeshes();
+    void FocusOnSelectedObject();
+    void DeleteSelectedObject();
 
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Shader> m_shader;
@@ -38,6 +42,7 @@ private:
     std::vector<std::shared_ptr<GameObject>> m_gameObjects;
     std::unique_ptr<Time> m_time;
     std::unique_ptr<GUI> m_gui;
+    std::shared_ptr<SceneManager> m_sceneManager;
 
     bool m_isRunning;
     float m_colorTime;
